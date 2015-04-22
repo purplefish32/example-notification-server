@@ -1,0 +1,14 @@
+{
+  "name": "Heartbeat",
+  "description": "Realtime dashboard for web applications",
+  "author": "Donovan Tengblad",
+  "version": "0.0.1",
+  "main": "index.js",
+  "private": true,
+  "licence": "MIT",
+  "dependencies": {
+    "express": "^4.12.3",
+    "mongo-watch": "^0.2.8",
+    "socket.io": "^1.3.5"
+  }
+}
