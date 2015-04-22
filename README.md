@@ -1,1 +1,1 @@
-# Basic node/socket notifications server
+# Basic node/socket notification server
