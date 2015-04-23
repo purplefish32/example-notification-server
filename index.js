@@ -4,38 +4,37 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
-var MongoWatch = require('mongo-watch');
+
+var bodyParser = require('body-parser')
+
+app.use( bodyParser.json() ); 
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
 
-watcher = new MongoWatch({format: 'pretty'});
+app.post('/apps/:app_id/events', function(req, res) {
 
-/*
-watcher.watch('heartbeat.ServerData', function(event) {
-  console.log('something changed:', event.data.serverId);
+  var channels = req.body.channels;
+  var name = req.body.name;
+  var data = req.body.data;
+
+  if (channels) {  
+    channels.forEach(function(room){
+      io.sockets.in(room).emit(name, data);
+    });
+  } else {
+    io.emit(name, data);
+  }
+
+  //TODO better response
+  res.send('OK');
 });
-*/
 
 io.on('connection', function (socket) {
-
   console.log('Client connected');
 
-  watcher.watch('heartbeat.ServerData', function(event) {
-
-    console.log('EVENT');
-    
-    console.log(event.data.details);
-
-    var details = JSON.parse(event.data.details);
-
-    console.log('PARSE');
-
-    console.log(details.disk.total);
-
-    console.log('END EVENT');
-
+/*
     emitServerData({
       serverUID:    event.data.serverId,
       diskTotal:    details.disk.total,
@@ -51,8 +50,7 @@ io.on('connection', function (socket) {
       swapTotal:    details.memory.swap.total,
       swapUsed:     details.memory.swap.used,
       swapFree:     details.memory.swap.free
-    });
-  });
+    });*/
 
   // when the client emits 'notification', this listens and executes
   socket.on('notification', function () {
