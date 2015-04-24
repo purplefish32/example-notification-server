@@ -28,6 +28,7 @@ app.post('/apps/:app_id/events', function(req, res) {
   }
 
   //TODO better response
+  res.setHeader('Content-Type', 'application/json');
   res.send('{}');
 });
 
